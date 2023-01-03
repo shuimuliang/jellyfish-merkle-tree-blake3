@@ -137,7 +137,7 @@ mod tests {
             proof: Some(ics23::commitment_proof::Proof::Exist(existence_proof)),
         };
 
-        assert!(ics23::verify_membership(
+        assert!(ics23::verify_membership::<ics23::HostFunctionsManager>(
             &commitment_proof,
             &ics23_spec(),
             &new_root_hash.0.to_vec(),
@@ -174,7 +174,7 @@ mod tests {
 
         let root_hash = tree.get_root_hash(MAX_VERSION).await.unwrap().0.to_vec();
 
-        assert!(ics23::verify_membership(
+        assert!(ics23::verify_membership::<ics23::HostFunctionsManager>(
             &commitment_proof,
             &ics23_spec(),
             &root_hash,
