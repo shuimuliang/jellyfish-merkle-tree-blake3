@@ -28,13 +28,11 @@ impl SparseMerkleInternalNode {
     }
 
     pub fn hash(&self) -> [u8; 32] {
-        use sha2::Digest;
-        let mut hasher = sha2::Sha256::new();
-        // chop a vowel to fit in 16 bytes
+        let mut hasher = blake3::Hasher::new();
         hasher.update(b"JMT::IntrnalNode");
         hasher.update(&self.left_child);
         hasher.update(&self.right_child);
-        *hasher.finalize().as_ref()
+        *hasher.finalize().as_bytes()
     }
 }
 
@@ -58,11 +56,11 @@ impl SparseMerkleLeafNode {
     }
 
     pub(crate) fn hash(&self) -> [u8; 32] {
-        use sha2::Digest;
-        let mut hasher = sha2::Sha256::new();
+        let mut hasher = blake3::Hasher::new();
         hasher.update(b"JMT::LeafNode");
         hasher.update(&self.key_hash.0);
         hasher.update(&self.value_hash.0);
-        *hasher.finalize().as_ref()
+        *hasher.finalize().as_bytes()
+
     }
 }

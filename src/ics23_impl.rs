@@ -54,7 +54,7 @@ where
                         (prefix, suffix)
                     };
                     path.push(ics23::InnerOp {
-                        hash: ics23::HashOp::Sha256.into(),
+                        hash: ics23::HashOp::Blake3.into(),
                         prefix,
                         suffix,
                     });
@@ -68,9 +68,9 @@ where
             value,
             path,
             leaf: Some(ics23::LeafOp {
-                hash: ics23::HashOp::Sha256.into(),
-                prehash_key: ics23::HashOp::Sha256.into(),
-                prehash_value: ics23::HashOp::Sha256.into(),
+                hash: ics23::HashOp::Blake3.into(),
+                prehash_key: ics23::HashOp::Blake3.into(),
+                prehash_value: ics23::HashOp::Blake3.into(),
                 length: ics23::LengthOp::NoPrefix.into(),
                 prefix: b"JMT::LeafNode".to_vec(),
             }),
@@ -81,15 +81,15 @@ where
 pub fn ics23_spec() -> ics23::ProofSpec {
     ics23::ProofSpec {
         leaf_spec: Some(ics23::LeafOp {
-            hash: ics23::HashOp::Sha256.into(),
-            prehash_key: ics23::HashOp::Sha256.into(),
-            prehash_value: ics23::HashOp::Sha256.into(),
+            hash: ics23::HashOp::Blake3.into(),
+            prehash_key: ics23::HashOp::Blake3.into(),
+            prehash_value: ics23::HashOp::Blake3.into(),
             length: ics23::LengthOp::NoPrefix.into(),
             prefix: b"JMT::LeafNode".to_vec(),
         }),
         inner_spec: Some(ics23::InnerSpec {
             // This is the only field we're sure about
-            hash: ics23::HashOp::Sha256.into(),
+            hash: ics23::HashOp::Blake3.into(),
             // These fields are apparently used for neighbor tests in range proofs,
             // and could be wrong:
             child_order: vec![0, 1], //where exactly does this need to be true?

@@ -153,19 +153,15 @@ pub struct ValueHash(pub [u8; 32]);
 
 impl<V: AsRef<[u8]>> From<V> for ValueHash {
     fn from(value: V) -> Self {
-        use sha2::Digest;
-        let mut hasher = sha2::Sha256::new();
-        hasher.update(value.as_ref());
-        Self(*hasher.finalize().as_ref())
+        let hash = blake3::hash(value.as_ref());
+        Self(*hash.as_bytes())
     }
 }
 
 impl<K: AsRef<[u8]>> From<K> for KeyHash {
     fn from(key: K) -> Self {
-        use sha2::Digest;
-        let mut hasher = sha2::Sha256::new();
-        hasher.update(key.as_ref());
-        let key_hash = Self(*hasher.finalize().as_ref());
+        let hash = blake3::hash(key.as_ref());
+        let key_hash = Self(*hash.as_bytes());
         // Adding a tracing event here allows cross-referencing the key hash
         // with the original key bytes when looking through logs.
         tracing::debug!(key = ?EscapedByteSlice(key.as_ref()), ?key_hash);
