@@ -1,12 +1,12 @@
 [package]
-name = "jmt"
+name = "jmt-blake3"
 version = "0.1.0"
-authors = ["Penumbra Labs <team@penumbra.zone>", "Diem Association <opensource@diem.com>"]
-description = "Jellyfish Merkle Tree (forked from Diem)"
-repository = "https://github.com/penumbra-zone/jellyfish-merkle"
-homepage = "https://penumbra.zone"
+authors = ["Penumbra Labs <team@penumbra.zone>", "Diem Association <opensource@diem.com>", "shuimuliang <shuimuliang@gmail.com>"]
+description = "Jellyfish Merkle Tree based on BLAKE3 hash function"
+repository = "https://github.com/shuimuliang/jellyfish-merkle-tree-blake3.git"
+homepage = "https://eclipse.io"
 license = "Apache-2.0"
-publish = false
+publish = true
 edition = "2018"
 
 [features]
