@@ -11,7 +11,7 @@ where
         &self,
         key: Vec<u8>,
         version: Version,
-    ) -> Result<ics23::ExistenceProof> {
+    ) -> Result<ics23_blake3::ExistenceProof> {
         let key_hash = key.as_slice().into();
         let (value, proof) = self.get_with_proof(key_hash, version).await?;
         let value = value.ok_or_else(|| {
@@ -53,8 +53,8 @@ where
                         let suffix = proof.siblings()[sibling_idx].to_vec();
                         (prefix, suffix)
                     };
-                    path.push(ics23::InnerOp {
-                        hash: ics23::HashOp::Blake3.into(),
+                    path.push(ics23_blake3::InnerOp {
+                        hash: ics23_blake3::HashOp::Blake3.into(),
                         prefix,
                         suffix,
                     });
@@ -63,33 +63,33 @@ where
             }
         }
 
-        Ok(ics23::ExistenceProof {
+        Ok(ics23_blake3::ExistenceProof {
             key,
             value,
             path,
-            leaf: Some(ics23::LeafOp {
-                hash: ics23::HashOp::Blake3.into(),
-                prehash_key: ics23::HashOp::Blake3.into(),
-                prehash_value: ics23::HashOp::Blake3.into(),
-                length: ics23::LengthOp::NoPrefix.into(),
+            leaf: Some(ics23_blake3::LeafOp {
+                hash: ics23_blake3::HashOp::Blake3.into(),
+                prehash_key: ics23_blake3::HashOp::Blake3.into(),
+                prehash_value: ics23_blake3::HashOp::Blake3.into(),
+                length: ics23_blake3::LengthOp::NoPrefix.into(),
                 prefix: b"JMT::LeafNode".to_vec(),
             }),
         })
     }
 }
 
-pub fn ics23_spec() -> ics23::ProofSpec {
-    ics23::ProofSpec {
-        leaf_spec: Some(ics23::LeafOp {
-            hash: ics23::HashOp::Blake3.into(),
-            prehash_key: ics23::HashOp::Blake3.into(),
-            prehash_value: ics23::HashOp::Blake3.into(),
-            length: ics23::LengthOp::NoPrefix.into(),
+pub fn ics23_spec() -> ics23_blake3::ProofSpec {
+    ics23_blake3::ProofSpec {
+        leaf_spec: Some(ics23_blake3::LeafOp {
+            hash: ics23_blake3::HashOp::Blake3.into(),
+            prehash_key: ics23_blake3::HashOp::Blake3.into(),
+            prehash_value: ics23_blake3::HashOp::Blake3.into(),
+            length: ics23_blake3::LengthOp::NoPrefix.into(),
             prefix: b"JMT::LeafNode".to_vec(),
         }),
-        inner_spec: Some(ics23::InnerSpec {
+        inner_spec: Some(ics23_blake3::InnerSpec {
             // This is the only field we're sure about
-            hash: ics23::HashOp::Blake3.into(),
+            hash: ics23_blake3::HashOp::Blake3.into(),
             // These fields are apparently used for neighbor tests in range proofs,
             // and could be wrong:
             child_order: vec![0, 1], //where exactly does this need to be true?
@@ -133,11 +133,15 @@ mod tests {
 
         let existence_proof = tree.get_with_ics23_proof(b"key".to_vec(), 0).await.unwrap();
 
-        let commitment_proof = ics23::CommitmentProof {
-            proof: Some(ics23::commitment_proof::Proof::Exist(existence_proof)),
+        let commitment_proof = ics23_blake3::CommitmentProof {
+            proof: Some(ics23_blake3::commitment_proof::Proof::Exist(
+                existence_proof,
+            )),
         };
 
-        assert!(ics23::verify_membership::<ics23::HostFunctionsManager>(
+        assert!(ics23_blake3::verify_membership::<
+            ics23_blake3::HostFunctionsManager,
+        >(
             &commitment_proof,
             &ics23_spec(),
             &new_root_hash.0.to_vec(),
@@ -168,13 +172,17 @@ mod tests {
             .await
             .unwrap();
 
-        let commitment_proof = ics23::CommitmentProof {
-            proof: Some(ics23::commitment_proof::Proof::Exist(existence_proof)),
+        let commitment_proof = ics23_blake3::CommitmentProof {
+            proof: Some(ics23_blake3::commitment_proof::Proof::Exist(
+                existence_proof,
+            )),
         };
 
         let root_hash = tree.get_root_hash(MAX_VERSION).await.unwrap().0.to_vec();
 
-        assert!(ics23::verify_membership::<ics23::HostFunctionsManager>(
+        assert!(ics23_blake3::verify_membership::<
+            ics23_blake3::HostFunctionsManager,
+        >(
             &commitment_proof,
             &ics23_spec(),
             &root_hash,

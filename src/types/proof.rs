@@ -61,6 +61,5 @@ impl SparseMerkleLeafNode {
         hasher.update(&self.key_hash.0);
         hasher.update(&self.value_hash.0);
         *hasher.finalize().as_bytes()
-
     }
 }

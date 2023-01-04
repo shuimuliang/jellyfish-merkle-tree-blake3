@@ -73,7 +73,7 @@ use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 mod bytes32ext;
-#[cfg(feature = "ics23")]
+#[cfg(feature = "ics23-blake3")]
 mod ics23_impl;
 mod iterator;
 mod metrics;
@@ -91,7 +91,7 @@ pub mod restore;
 use bytes32ext::Bytes32Ext;
 use types::nibble::ROOT_NIBBLE_HEIGHT;
 
-#[cfg(feature = "ics23")]
+#[cfg(feature = "ics23-blake3")]
 pub use ics23_impl::ics23_spec;
 pub use iterator::JellyfishMerkleStream;
 pub use overlay::WriteOverlay;

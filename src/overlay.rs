@@ -88,7 +88,7 @@ where
     pub async fn get_with_proof(
         &self,
         key: Vec<u8>,
-    ) -> Result<(OwnedValue, ics23::ExistenceProof)> {
+    ) -> Result<(OwnedValue, ics23_blake3::ExistenceProof)> {
         if self.overlay.contains_key(&key.clone().into()) {
             return Err(anyhow::anyhow!("key is not yet committed to tree"));
         }
