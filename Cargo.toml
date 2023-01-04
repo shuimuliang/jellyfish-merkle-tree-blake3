@@ -1,6 +1,6 @@
 [package]
 name = "jmt-blake3"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Penumbra Labs <team@penumbra.zone>", "Diem Association <opensource@diem.com>", "shuimuliang <shuimuliang@gmail.com>"]
 description = "Jellyfish Merkle Tree based on BLAKE3 hash function"
 repository = "https://github.com/shuimuliang/jellyfish-merkle-tree-blake3.git"
@@ -29,7 +29,7 @@ prometheus = "0.13.3"
 bcs = "0.1.4"
 sha2 = "0.10.6"
 futures = "0.3.25"
-tokio = { version = "1.23.0", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
 async-recursion = "1.0.0"
 hex = "0.4.3"
 tracing = "0.1.37"
